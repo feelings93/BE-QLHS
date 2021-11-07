@@ -12,4 +12,7 @@ class HocSinh extends Model
     protected $casts = [
     'ngaySinh' => 'datetime:d/m/Y', // Change your format
 ];
+public function QTH() {
+        return $this->hasMany('App\QuaTrinhHoc', 'maHS', 'maHS');
+    }
 }

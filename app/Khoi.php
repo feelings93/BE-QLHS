@@ -11,5 +11,8 @@ class Khoi extends Model
     public function Lop() {
         return $this->hasMany('App\Lop', 'maKhoi', 'maKhoi');
     }
+    public function ChuongTrinhHoc() {
+        return $this->hasMany('App\ChuongTrinhHoc', 'maKhoi', 'maKhoi');
+    }
 
 }
