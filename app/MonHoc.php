@@ -11,4 +11,7 @@ class MonHoc extends Model
     public function ChuongTrinhHoc() {
         return $this->hasMany('App\ChuongTrinhHoc', 'maMH', 'maMH');
     }
+    public function TongKetMon() {
+        return $this->hasMany('App\TongKetMon', 'maMH', 'maMH');
+    }
 }

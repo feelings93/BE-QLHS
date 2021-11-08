@@ -16,5 +16,10 @@ class Lop extends Model
 
         return $this->belongsTo('App\Khoi', 'maKhoi', 'maKhoi');
     }
-
+    public function TongKetHocKy() {
+        return $this->hasMany('App\TongKetHocKy', 'maLop', 'maLop');
+    }
+    public function TongKetMon() {
+        return $this->hasMany('App\TongKetHocKy', 'maLop', 'maLop');
+    }
 }

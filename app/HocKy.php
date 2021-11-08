@@ -11,4 +11,10 @@ class HocKy extends Model
     public function QTH() {
         return $this->hasMany('App\QuaTrinhHoc', 'maHK', 'maHK');
     }
+    public function TongKetHocKy() {
+        return $this->hasMany('App\TongKetHocKy', 'maHK', 'maHK');
+    }
+    public function TongKetMon() {
+        return $this->hasMany('App\TongKetMon', 'maHK', 'maHK');
+    }
 }
