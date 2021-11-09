@@ -14,4 +14,7 @@ class MonHoc extends Model
     public function TongKetMon() {
         return $this->hasMany('App\TongKetMon', 'maMH', 'maMH');
     }
+    public function BangDiem() {
+        return $this->hasMany('App\BangDiem', 'maMH', 'maMH');
+    }
 }

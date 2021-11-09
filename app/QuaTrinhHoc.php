@@ -17,4 +17,8 @@ class QuaTrinhHoc extends Model
     public function HocKy() {
         return $this->belongsTo('App\HocKy', 'maHK', 'maHK');
     }
+    public function BangDiem() {
+        return $this->hasMany('App\BangDiem', 'maQTH', 'maQTH');
+    }
 }
+

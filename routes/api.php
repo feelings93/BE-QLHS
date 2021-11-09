@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BangDiemController;
 use App\Http\Controllers\ChuongTrinhHocController;
 use App\Http\Controllers\HocSinhController;
 use App\Http\Controllers\KhoiController;
@@ -61,6 +62,8 @@ Route::get("/mon-hoc", [MonHocController::class, 'index']);
 Route::post("/mon-hoc", [MonHocController::class, 'store']);
 Route::get("/mon-hoc/{id}", [MonHocController::class, 'show']);
 Route::put("/mon-hoc/{id}", [MonHocController::class, 'update']);
+// Điểm
+Route::get("bang-diem/{maHK}/{maLop}/{maMH}", [BangDiemController::class, 'getBangDiem']);
 });
 
 
