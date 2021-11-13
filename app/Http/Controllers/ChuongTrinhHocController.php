@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\ChuongTrinhHoc;
+use App\Khoi;
+use App\MonHoc;
 use Illuminate\Http\Request;
 
 class ChuongTrinhHocController extends Controller
@@ -15,17 +17,14 @@ class ChuongTrinhHocController extends Controller
     public function index()
     {
         //
-        return ChuongTrinhHoc::all()->map(
-            function($item, $index)
-            {
-                $new = new ChuongTrinhHoc();
-                $new->maCTH = $item->maCTH;
-                $new->tenMH = $item->MonHoc->tenMH;
-                $new->tenKhoi = $item->Khoi->tenKhoi;
-                $new->heSo = $item->heSo;
-                 return $new;
-            }
-        );
+        $khois = Khoi::all();
+        $mhs = MonHoc::all();
+        $cths = ChuongTrinhHoc::all();
+        foreach($cths as $cth) {
+            $cth->tenMH = $mhs->where('maMH', $cth->maMH)->first()->tenMH;
+            $cth->tenKhoi = $khois->where('maKhoi', $cth->maKhoi)->first()->tenKhoi;
+        }
+        return $cths;
     }
 
     /**
@@ -48,6 +47,7 @@ class ChuongTrinhHocController extends Controller
     {
         //
         ChuongTrinhHoc::create($request->all());
+        return response()->json(['message' => 'Thêm chương trình học thành công'], 200);
     }
 
     /**

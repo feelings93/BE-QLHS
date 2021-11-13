@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\HocKy;
 use App\HocSinh;
 use Illuminate\Http\Request;
 
 class HocSinhController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
 
-    }//
+    // }//
 
     /**
      *
@@ -29,6 +30,18 @@ class HocSinhController extends Controller
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
+     public function getHocSinhTrong($maHK)
+    {
+        $hk = HocKy::find($maHK);
+        $qths = $hk->QTH()->get();
+        $maHSDaHoc = [];
+        foreach ($qths as $qth) {
+            $hs = $qth->HocSinh;
+            array_push($maHSDaHoc, $hs->maHS);
+
+        }
+        return HocSinh::all()->except($maHSDaHoc);
+    }
     /**
      * Show the form for creating a new resource.
      *

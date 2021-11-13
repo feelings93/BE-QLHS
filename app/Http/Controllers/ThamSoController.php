@@ -13,12 +13,26 @@ class ThamSoController extends Controller
         $this->middleware('auth:api');
 
     }//
+    public function index() {
+        return ThamSo::all();
+    }
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function suaThamSo(Request $request) {
+        $thamSos = json_decode($request->thamSo);
+
+        foreach ($thamSos as $thamSo) {
+
+            $ts = ThamSo::find($thamSo->maTS);
+            $ts->giaTri = $thamSo->giaTri;
+            $ts->save();
+        }
+        return response()->json(['message' => 'Cập nhật tham số thành công']);
+    }
     public function show($id)
     {
        $ts = ThamSo::find($id);
