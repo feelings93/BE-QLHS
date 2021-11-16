@@ -37,6 +37,9 @@ class MonHocController extends Controller
     public function store(Request $request)
     {
         //
+        if (str_word_count(trim($request->tenMH)) === 0 || !is_numeric($request->diemDat)) return response()->json(['message' => "Vui lòng nhập đủ thông tin"], 422);
+
+        if (!is_numeric($request->diemDat) || $request->diemDat < 0 || $request->diemDat >10) return response()->json(['message' => "Điểm đạt không hợp lệ"], 422);
         return MonHoc::create($request->all());
     }
 
@@ -52,6 +55,7 @@ class MonHocController extends Controller
         if ($mh == null) {
             return response()->json(['message' => 'Không tìm thấy môn học'], 404);
         }
+
         return $mh;
     }
 
@@ -79,6 +83,9 @@ class MonHocController extends Controller
         if ($mh == null) {
             return response()->json(['message' => 'Không tìm thấy môn học'], 404);
         }
+        if (str_word_count(trim($request->tenMH)) === 0 || !is_numeric($request->diemDat)) return response()->json(['message' => "Vui lòng nhập đủ thông tin"], 422);
+
+        if (!is_numeric($request->diemDat) || $request->diemDat < 0 || $request->diemDat >10) return response()->json(['message' => "Điểm đạt không hợp lệ"], 422);
         $mh->tenMH = $request->tenMH;
         $mh->diemDat = $request->diemDat;
         $mh->save();

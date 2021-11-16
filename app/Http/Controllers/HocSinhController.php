@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\HocKy;
 use App\HocSinh;
+use App\ThamSo;
+use DateTime;
 use Illuminate\Http\Request;
 
 class HocSinhController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth:api');
+    public function __construct()
+    {
+        $this->middleware('auth:api');
 
-    // }//
+    }//
 
     /**
      *
@@ -23,11 +25,9 @@ class HocSinhController extends Controller
      */
     public function index()
     {
-        if (auth()->user()) {
         return HocSinh::all();
 
-        }
-        return response()->json(['error' => 'Unauthorized'], 401);
+
     }
 
      public function getHocSinhTrong($maHK)
@@ -60,6 +60,16 @@ class HocSinhController extends Controller
      */
     public function store(Request $request)
     {
+        if (str_word_count(trim($request->hoTen)) === 0 || str_word_count(trim($request->gioiTinh)) === 0 || str_word_count(trim($request->diaChi)) === 0 ||str_word_count(trim($request->ngaySinh)) === 0)
+        {
+            return response()->json(['message' => "Vui lòng nhập đầy đủ thông tin"], 422);
+        }
+        $date = new DateTime($request->ngaySinh);
+        $now = new DateTime();
+        $interval = $now->diff($date);
+        $interval->y;
+        if ($interval->y < ThamSo::find(6)->giaTri || $interval->y > ThamSo::find(7)->giaTri)
+         return \response()->json(['message' => "Tuổi không hợp lệ"], 422);
         $hocSinh = HocSinh::create($request->all());
         return $hocSinh;
     }
@@ -72,7 +82,11 @@ class HocSinhController extends Controller
      */
     public function show($id)
     {
-        return HocSinh::find($id);
+
+
+        $hs =  HocSinh::find($id);
+        if ($hs != null) return $hs;
+        return response()->json(["message" => "Không tìm thấy học sinh này"], 404);
     }
 
     /**
@@ -95,14 +109,25 @@ class HocSinhController extends Controller
      */
     public function update(Request $request, $maHS)
     {
+        if (str_word_count(trim($request->hoTen)) === 0 || str_word_count(trim($request->gioiTinh)) === 0 || str_word_count(trim($request->diaChi)) === 0 ||str_word_count(trim($request->ngaySinh)) === 0)
+        {
+            return response()->json(['message' => "Vui lòng nhập đầy đủ thông tin"], 422);
+        }
+        $date = new DateTime($request->ngaySinh);
+        $now = new DateTime();
+        $interval = $now->diff($date);
+        $interval->y;
+        if ($interval->y < ThamSo::find(6)->giaTri || $interval->y > ThamSo::find(7)->giaTri)
+         return \response()->json(['message' => "Tuổi không hợp lệ"], 422);
         $hocSinh = HocSinh::find($maHS);
         if ($hocSinh) {
+
             $hocSinh->update($request->all());
           return $hocSinh;
 
 
         }
-        else return response()->json('nnot found', 404);
+        else return response()->json(["message" => "Không tìm thấy học sinh này"], 404);
 
     }
 

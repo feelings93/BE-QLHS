@@ -46,8 +46,13 @@ class ChuongTrinhHocController extends Controller
     public function store(Request $request)
     {
         //
-        ChuongTrinhHoc::create($request->all());
-        return response()->json(['message' => 'Thêm chương trình học thành công'], 200);
+        if (!is_numeric($request->heSo) || $request->heSo <= 0) return response()->json(['message' => "Hệ số điểm không hợp lệ"], 422);
+        $new = ChuongTrinhHoc::create($request->all());
+        $new->tenMH = $new->MonHoc->tenMH;
+        $new->tenKhoi = $new->Khoi->tenKhoi;
+        return $new;
+
+
     }
 
     /**
@@ -62,6 +67,7 @@ class ChuongTrinhHocController extends Controller
         if ($cth == null) {
             return response()->json(['message' => 'Không tìm thấy chương trình học'], 404);
         }
+
         $new = new ChuongTrinhHoc();
         $new->maCTH = $cth->maCTH;
         $new->tenMH = $cth->MonHoc->tenMH;
@@ -90,6 +96,7 @@ class ChuongTrinhHocController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!is_numeric($request->heSo) || $request->heSo <= 0) return response()->json(['message' => "Hệ số điểm không hợp lệ"], 422);
         $cth = ChuongTrinhHoc::find($id);
         if ($cth == null) {
             return response()->json(['message' => 'Không tìm thấy chương trình học'], 404);
