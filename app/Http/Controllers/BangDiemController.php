@@ -118,7 +118,7 @@ class BangDiemController extends Controller
         if ($bd->ChiTietBangDiem()->count() === 0) $bd->diemTBM = -1;
         else $bd->diemTBM = $tongDiem/$tongHeSo;
         $bd->save();
-        return response()->json(['message'=> 'Cập nhật bảng điểm thành công'], 200);
+        return response()->json(['diemTBM'=> $bd->diemTBM, 'maBD' => $bd->maBD], 200);
     }
     public function suaBangDiem(Request $request, $id) {
         $bd = BangDiem::find($id);
@@ -174,7 +174,8 @@ class BangDiemController extends Controller
         if ($bd->ChiTietBangDiem()->count() === 0) $bd->diemTBM = -1;
         else $bd->diemTBM = $tongDiem/$tongHeSo;
         $bd->save();
-        return response()->json(['message'=> 'Cập nhật bảng điểm thành công'], 200);
+        return response()->json(['diemTBM'=> $bd->diemTBM], 200);
+
     }
     public function getLopHKMH()
     {

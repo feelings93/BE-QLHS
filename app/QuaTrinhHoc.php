@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuaTrinhHoc extends Model
 {
-    protected $fillable = [ 'maLop', 'maHS', 'maHK', 'diemTB'];
+    protected $fillable = [ 'maLop', 'maHS', 'maHK', 'diemTB', 'hanhKiem', 'baoHiem', 'hocPhi'];
     protected $primaryKey = 'maQTH';
     public function Lop() {
         return $this->belongsTo('App\Lop', 'maLop', 'maLop');

@@ -7,7 +7,9 @@ use App\Http\Controllers\HocSinhController;
 use App\Http\Controllers\KhoiController;
 use App\Http\Controllers\LopController;
 use App\Http\Controllers\MonHocController;
+use App\Http\Controllers\QuaTrinhHocController;
 use App\Http\Controllers\ThamSoController;
+use App\QuaTrinhHoc;
 use App\ThamSo;
 use Illuminate\Http\Request;
 
@@ -33,13 +35,22 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
-    Route::get('hoc-sinh', [HocSinhController::class, 'index']);
+    Route::post('register', 'AuthController@register');
+    Route::post("users/delete", 'AuthController@delUsers');
+    Route::get('users', 'AuthController@index');
+    Route::put('user/{id}', 'AuthController@update');
+    Route::post('reset/user/{id}', 'AuthController@reset');
+
+
+
 });
 Route::group([
     'middleware' => ['cors'],
 ], function ($router) {
 
 // Học Sinh
+Route::get('hoc-sinh', [HocSinhController::class, 'index']);
+
 Route::get('/hoc-sinh/{maHS}', [HocSinhController::class, 'show']);
 Route::get('/hoc-sinh-trong/{id}', [HocSinhController::class, 'getHocSinhTrong']);
 
@@ -55,6 +66,9 @@ Route::get("/lop/{maLop}/{maHK}", [LopController::class, 'getHocSinhCuaLop']);
 Route::post("/lop/{maLop}/{maHK}", [LopController::class, 'addHocSinhVaoLop']);
 Route::post("/lop/xoa-hoc-sinh/{maLop}/{maHK}", [LopController::class, 'xoaHocSinhKhoiLop']);
 Route::post("/lop", [LopController::class, 'store']);
+// Qá trình học
+Route::put("/qth/{id}", [QuaTrinhHocController::class, 'update']);
+
 // Tham số
 Route::get("/tham-so", [ThamSoController::class, 'index']);
 Route::get("/tham-so/{id}", [ThamSoController::class, 'show']);
@@ -77,6 +91,9 @@ Route::post("bang-diem", [BangDiemController::class, 'themBangDiem']);
 Route::put("bang-diem/{maBD}", [BangDiemController::class, 'suaBangDiem']);
 // Môn học, học kì, lớp
 Route::get("lop-hk-mh", [BangDiemController::class, 'getLopHKMH']);
+// Thông tin cá nhân
+Route::put("profile/{id}", 'AuthController@updateProfile');
+
 });
 
 

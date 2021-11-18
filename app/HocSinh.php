@@ -15,4 +15,7 @@ class HocSinh extends Model
 public function QTH() {
         return $this->hasMany('App\QuaTrinhHoc', 'maHS', 'maHS');
     }
+    public function QuanLyLop() {
+        return $this->hasMany('App\QuanLyLop', 'maHS', 'maLopTruong');
+    }
 }

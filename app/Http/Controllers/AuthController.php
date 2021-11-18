@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -15,7 +17,60 @@ class AuthController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login']]);
     }
+    public function index() {
+        return User::all();
+    }
+    public function update(Request $request, $id) {
+        $user =  User::find($id);
+        if ($user === null) {
+            return response()->json(["message" => "Không tìm thấy người dùng này"], 404);
+        }
+        $user->name =$request->hoTen;
+        $user->maNhom = $request->maNhom;
+        $user->save();
+        return $user;
+    }
+    public function updateProfile(Request $request, $id) {
+        $user =  User::find($id);
+        if ($user === null) {
+            return response()->json(["message" => "Không tìm thấy người dùng này"], 404);
+        }
+        $user->name =$request->hoTen;
+        $user->save();
+        return $user;
+    }
+    public function register(Request $request)
+    {
+        $user = new User();
+        $user->name = $request->hoTen;
+        $user->email = $request->email;
+        $user->maNhom = $request->maNhom;
+        $user->password = Hash::make($request->password);
+        $user->save();
 
+        return $user;
+    }
+    public function reset( $id)
+    {
+        $user =  User::find($id);
+        if ($user === null) {
+            return response()->json(["message" => "Không tìm thấy người dùng này"], 404);
+        }
+        $user->password = Hash::make("123456");
+        $user->save();
+         return response()->json(["message" => "Khôi phục mật khẩu người dùng thành công"], 200);
+    }
+    public function delUsers(Request $request)
+    {
+
+        foreach (json_decode($request->id, true)  as $id)
+        {
+            $delUser = User::find($id);
+            $delUser->delete();
+
+        }
+        return response()->json(['message' => 'Xóa người dùng thành công'], 200);
+    }
     /**
      * Get a JWT via given credentials.
      *

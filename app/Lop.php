@@ -9,6 +9,9 @@ class Lop extends Model
     //
     protected $fillable = ['tenLop', 'maKhoi'];
     protected $primaryKey = 'maLop';
+    public function QuanLyLop() {
+        return $this->hasMany('App\QuanLyLop', 'maLop', 'maLop');
+    }
     public function QTH() {
         return $this->hasMany('App\QuaTrinhHoc', 'maLop', 'maLop');
     }
