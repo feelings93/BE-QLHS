@@ -26,7 +26,7 @@ class KhoiController extends Controller
     {
        $khoi = Khoi::find($id);
        if ($khoi === null) {
-           return response()->json(['error' => 'Không tìm thấy học sinh'], 404);
+           return response()->json(['error' => 'Không tìm thấy khối'], 404);
        }
        $khoi->lop = json_encode($khoi->Lop);
        return $khoi;

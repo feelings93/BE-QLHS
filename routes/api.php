@@ -1,14 +1,22 @@
 <?php
 
 use App\BangDiem;
+use App\GiaoVien;
+use App\HocSinh;
 use App\Http\Controllers\BangDiemController;
 use App\Http\Controllers\ChuongTrinhHocController;
+use App\Http\Controllers\HocKyController;
 use App\Http\Controllers\HocSinhController;
 use App\Http\Controllers\KhoiController;
 use App\Http\Controllers\LopController;
 use App\Http\Controllers\MonHocController;
+use App\Http\Controllers\QuanLyLopController;
 use App\Http\Controllers\QuaTrinhHocController;
 use App\Http\Controllers\ThamSoController;
+use App\Http\Controllers\TongKetHocKyController;
+use App\Http\Controllers\TongKetMonController;
+use App\Lop;
+use App\MonHoc;
 use App\QuaTrinhHoc;
 use App\ThamSo;
 use Illuminate\Http\Request;
@@ -57,17 +65,23 @@ Route::get('/hoc-sinh-trong/{id}', [HocSinhController::class, 'getHocSinhTrong']
 Route::post('/hoc-sinh', [HocSinhController::class, 'store']);
 Route::put('/hoc-sinh/{maHS}', [HocSinhController::class, 'update']);
 Route::delete('/hoc-sinh/{maHS}', [HocSinhController::class, 'destroy']);
+// Học Kỳ
+Route::get('/hk', [HocKyController:: class, 'index']);
+
 // Khối
 Route::get('/khoi', [KhoiController:: class, 'index']);
 Route::get('/khoi/{id}', [KhoiController::class, 'show']);
 // Lớp
-Route::get("/lop", [LopController::class, 'index']);
+Route::get("/lop&maHK={maHK}", [LopController::class, 'index']);
 Route::get("/lop/{maLop}/{maHK}", [LopController::class, 'getHocSinhCuaLop']);
 Route::post("/lop/{maLop}/{maHK}", [LopController::class, 'addHocSinhVaoLop']);
 Route::post("/lop/xoa-hoc-sinh/{maLop}/{maHK}", [LopController::class, 'xoaHocSinhKhoiLop']);
 Route::post("/lop", [LopController::class, 'store']);
 // Qá trình học
 Route::put("/qth/{id}", [QuaTrinhHocController::class, 'update']);
+// Cán bộ
+Route::put("/qll", [QuanLyLopController::class, 'updateCanBo']);
+Route::get("/gv-trong/{maHK}", [QuanLyLopController::class, 'getGVTrong']);
 
 // Tham số
 Route::get("/tham-so", [ThamSoController::class, 'index']);
@@ -93,6 +107,22 @@ Route::put("bang-diem/{maBD}", [BangDiemController::class, 'suaBangDiem']);
 Route::get("lop-hk-mh", [BangDiemController::class, 'getLopHKMH']);
 // Thông tin cá nhân
 Route::put("profile/{id}", 'AuthController@updateProfile');
+// Thay đổi mật khẩu
+Route::put("change-password/{id}", 'AuthController@updatePassword');
+// Tổng kết môn
+Route::get("tkm/{maHK}/{maMH}", [TongKetMonController::class, 'getByForeign']);
+Route::put("tkm/{maHK}/{maMH}", [TongKetMonController::class, 'updateByForeign']);
+// Tổng kết học kỳ
+ Route::get("tkhk/{maHK}", [TongKetHocKyController::class, 'getByForeign']);
+ Route::put("tkhk/{maHK}", [TongKetHocKyController::class, 'updateByForeign']);
+// Tổng quan
+Route::get("tong-quan", function () {
+    $soLopHoc = Lop::all()->count();
+    $soGV = GiaoVien::all()->count();
+    $soHocSinh = HocSinh::all()->count();
+    $soMonHoc = MonHoc::all()->count();
+    return response()->json(["soLopHoc" => $soLopHoc, "soGV" => $soGV, "soHocSinh" => $soHocSinh, "soMonHoc" => $soMonHoc]);
+});
 
 });
 

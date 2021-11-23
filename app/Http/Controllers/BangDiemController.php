@@ -15,6 +15,10 @@ class BangDiemController extends Controller
 {
     public function getBangDiem($maHK, $maLop, $maMH)
     {
+        $khoi = Lop::find($maLop)->Khoi;
+        if (MonHoc::find($maMH)->ChuongTrinhHoc()->where('maKhoi', $khoi->maKhoi)->first() === null) {
+            return [];
+        }
         $qth =  QuaTrinhHoc::where('maLop', $maLop)->where('maHK', $maHK)->get();
         $res = new Collection([]);
         foreach($qth as $qthItem) {
@@ -118,6 +122,23 @@ class BangDiemController extends Controller
         if ($bd->ChiTietBangDiem()->count() === 0) $bd->diemTBM = -1;
         else $bd->diemTBM = $tongDiem/$tongHeSo;
         $bd->save();
+        $qth = QuaTrinhHoc::find($request->maQTH);
+        $bds = BangDiem::where('maQTH', $request->maQTH)->get();
+        $tongHeSo = 0;
+        $tongDiem = 0;
+        foreach ($bds as $_bd) {
+            $cth = $_bd->MonHoc->ChuongTrinhHoc()->where('maKhoi', $qth->Lop->Khoi->maKhoi)->first();
+            if ($cth !== null) {
+                $tongHeSo += $cth->heSo;
+                $tongDiem += $_bd->diemTBM * $cth->heSo;
+            }
+        }
+        if ($tongHeSo !== 0) {
+            $qth->diemTB = $tongDiem/$tongHeSo;
+
+        }
+        else  $qth->diemTB = -1;
+        $qth->save();
         return response()->json(['diemTBM'=> $bd->diemTBM, 'maBD' => $bd->maBD], 200);
     }
     public function suaBangDiem(Request $request, $id) {
@@ -174,6 +195,23 @@ class BangDiemController extends Controller
         if ($bd->ChiTietBangDiem()->count() === 0) $bd->diemTBM = -1;
         else $bd->diemTBM = $tongDiem/$tongHeSo;
         $bd->save();
+        $qth = QuaTrinhHoc::find($bd->maQTH);
+        $bds = BangDiem::where('maQTH', $bd->maQTH)->get();
+        $tongHeSo = 0;
+        $tongDiem = 0;
+        foreach ($bds as $_bd) {
+            $cth = $_bd->MonHoc->ChuongTrinhHoc()->where('maKhoi', $qth->Lop->Khoi->maKhoi)->first();
+            if ($cth !== null) {
+                $tongHeSo += $cth->heSo;
+                $tongDiem += $_bd->diemTBM * $cth->heSo;
+            }
+        }
+        if ($tongHeSo !== 0) {
+            $qth->diemTB = $tongDiem/$tongHeSo;
+
+        }
+        else  $qth->diemTB = -1;
+        $qth->save();
         return response()->json(['diemTBM'=> $bd->diemTBM], 200);
 
     }

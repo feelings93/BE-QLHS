@@ -39,6 +39,19 @@ class AuthController extends Controller
         $user->save();
         return $user;
     }
+    public function updatePassword(Request $request, $id) {
+        $user =  User::find($id);
+         if ($user === null) {
+            return response()->json(["message" => "Không tìm thấy người dùng này"], 404);
+        }
+        if (!Hash::check($request->matKhauCu, $user->password)) {
+             return response()->json(["message" => "Mật khẩu cũ không chính xác"], 422);
+        };
+
+        $user->password = Hash::make($request->matKhauMoi);
+        $user->save();
+        return $user;
+    }
     public function register(Request $request)
     {
         $user = new User();
@@ -103,9 +116,9 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+            auth()->logout();
+            return response()->json(['message' => 'Đăng xuất thành công']);
 
-        return response()->json(['message' => 'Đăng xuất thành công']);
     }
 
     /**

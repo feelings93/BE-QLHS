@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Lop;
 use App\QuanLyLop;
 use App\QuaTrinhHoc;
+use App\ThamSo;
 use Illuminate\Database\Eloquent\Collection;
 
 class LopController extends Controller
@@ -17,9 +18,15 @@ class LopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($maHK)
     {
-        return Lop::all();
+        $lops = Lop::all();
+        foreach($lops as $lop) {
+           $qths =  $lop->QTH()->where('maHK', $maHK)->get();
+           if ($qths === null) $lop->siSo = 0;
+           else $lop->siSo = $qths->count();
+        }
+        return $lops;
     }
     public function getHocSinhCuaLop($maLop, $maHK)
     {
@@ -51,6 +58,10 @@ class LopController extends Controller
     public function addHocSinhVaoLop(Request $request, $maLop, $maHK)
     {
         $hss = new Collection();
+        $qths = QuaTrinhHoc::where('maLop', $maLop)->where('maHK', $maHK)->get();
+        if ($qths->count() + count(json_decode($request->maHS, true))  > ThamSo::find(3)->giaTri) {
+            return response()->json(['message' => 'Bạn không thể thêm học sinh vượt quá sĩ số tối đa'], 422);
+        }
         foreach (json_decode($request->maHS, true)  as $maHS)
         {
             $qth = new QuaTrinhHoc();
@@ -77,6 +88,9 @@ class LopController extends Controller
         foreach (json_decode($request->maHS, true)  as $maHS)
         {
             $delQths = $qths->where('maHS', $maHS)->first();
+            if ($delQths->BangDiem()->count() > 0) {
+                return response()->json(['message' => 'Bạn không thể xóa học sinh đã có bảng điểm'], 422);
+            }
             $delQths->delete();
 
         }
@@ -101,6 +115,7 @@ class LopController extends Controller
     public function store(Request $request)
     {
         //
+        if (Lop::all()->count() >= ThamSo::find(1)->giaTri) return response()->json(['message' => "Số lớp học đã đạt mức tối đa"], 422);
         $lop = Lop::create($request->all());
         return $lop;
     }
