@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MonHoc extends Model
 {
+    // use SoftDeletes;
     protected $fillable = ['tenMH', 'diemDat'];
     protected $primaryKey = 'maMH';
     public function ChuongTrinhHoc() {

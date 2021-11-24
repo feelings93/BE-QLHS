@@ -135,9 +135,24 @@ class HocSinhController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-       HocSinh::destroy($id);
-        return response()->json(null, 204);
+       foreach (json_decode($request->maHS, true)  as $maHS)
+        {
+            $delHs = HocSinh::find($maHS);
+            if ($delHs->QTH()->count() > 0) {
+                return response()->json(['message' => 'Bạn không thể xóa học sinh đã ghi nhận quá trình học'], 422);
+            }
+
+        }
+        foreach (json_decode($request->maHS, true)  as $maHS)
+        {
+            $delHs = HocSinh::find($maHS);
+            $delHs->delete();
+
+        }
+
+
+        return response()->json(['message' => 'Xóa học sinh thành công'], 200);
     }
 }

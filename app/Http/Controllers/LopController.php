@@ -91,8 +91,11 @@ class LopController extends Controller
             if ($delQths->BangDiem()->count() > 0) {
                 return response()->json(['message' => 'Bạn không thể xóa học sinh đã có bảng điểm'], 422);
             }
+        }
+        foreach (json_decode($request->maHS, true)  as $maHS)
+        {
+            $delQths = $qths->where('maHS', $maHS)->first();
             $delQths->delete();
-
         }
         return response()->json(['message' => 'Xóa khỏi lớp thành công'], 200);
     }

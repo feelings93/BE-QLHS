@@ -64,7 +64,7 @@ Route::get('/hoc-sinh-trong/{id}', [HocSinhController::class, 'getHocSinhTrong']
 
 Route::post('/hoc-sinh', [HocSinhController::class, 'store']);
 Route::put('/hoc-sinh/{maHS}', [HocSinhController::class, 'update']);
-Route::delete('/hoc-sinh/{maHS}', [HocSinhController::class, 'destroy']);
+Route::post('/hoc-sinh/delete', [HocSinhController::class, 'destroy']);
 // Học Kỳ
 Route::get('/hk', [HocKyController:: class, 'index']);
 
@@ -94,11 +94,15 @@ Route::get("/cth", [ChuongTrinhHocController::class, 'index']);
 Route::post("/cth", [ChuongTrinhHocController::class, 'store']);
 Route::get("/cth/{id}", [ChuongTrinhHocController::class, 'show']);
 Route::put("/cth/{id}", [ChuongTrinhHocController::class, 'update']);
+Route::post("/cth/delete", [ChuongTrinhHocController::class, 'destroy']);
+
 // Môn học
 Route::get("/mon-hoc", [MonHocController::class, 'index']);
 Route::post("/mon-hoc", [MonHocController::class, 'store']);
 Route::get("/mon-hoc/{id}", [MonHocController::class, 'show']);
 Route::put("/mon-hoc/{id}", [MonHocController::class, 'update']);
+Route::post("/mon-hoc/delete", [MonHocController::class, 'destroy']);
+
 // Điểm
 Route::get("bang-diem/{maHK}/{maLop}/{maMH}", [BangDiemController::class, 'getBangDiem']);
 Route::post("bang-diem", [BangDiemController::class, 'themBangDiem']);

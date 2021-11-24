@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lop extends Model
 {
     //
+
     protected $fillable = ['tenLop', 'maKhoi'];
     protected $primaryKey = 'maLop';
     public function QuanLyLop() {

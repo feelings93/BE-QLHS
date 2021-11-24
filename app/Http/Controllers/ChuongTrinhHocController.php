@@ -47,6 +47,10 @@ class ChuongTrinhHocController extends Controller
     {
         //
         if (!is_numeric($request->heSo) || $request->heSo <= 0) return response()->json(['message' => "Hệ số điểm không hợp lệ"], 422);
+        $cth = ChuongTrinhHoc::where('maMH', $request->maMH)->where('maKhoi', $request->maKhoi)->get();
+        if ($cth->count() > 0) {
+            return response()->json(['message' => "Chương trình học này đã tồn tại"], 422);
+        }
         $new = ChuongTrinhHoc::create($request->all());
         $new->tenMH = $new->MonHoc->tenMH;
         $new->tenKhoi = $new->Khoi->tenKhoi;
@@ -112,8 +116,17 @@ class ChuongTrinhHocController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+
+        foreach (json_decode($request->maCTH, true)  as $maCTH)
+        {
+            $delCTH = ChuongTrinhHoc::find($maCTH);
+            $delCTH->delete();
+
+        }
+
+
+        return response()->json(['message' => 'Xóa chương trình học thành công'], 200);
     }
 }

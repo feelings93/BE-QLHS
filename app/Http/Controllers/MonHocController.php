@@ -43,6 +43,8 @@ class MonHocController extends Controller
         if (!is_numeric($request->diemDat) || $request->diemDat < 0 || $request->diemDat >10) return response()->json(['message' => "Điểm đạt không hợp lệ"], 422);
         if (!is_numeric($request->diemDat) || $request->diemDat < 0 || $request->diemDat >10) return response()->json(['message' => "Điểm đạt không hợp lệ"], 422);
         if (MonHoc::all()->count() >= ThamSo::find(4)->giaTri) return response()->json(['message' => "Số môn học đã đạt mức tối đa"], 422);
+        $mhs = MonHoc::where('tenMH', $request->tenMH)->get();
+        if ($mhs->count() > 0)  return response()->json(['message' => "Tên môn học đã tồn tại"], 422);
         return MonHoc::create($request->all());
     }
 
@@ -101,8 +103,29 @@ class MonHocController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        foreach (json_decode($request->maMH, true)  as $maMH)
+        {
+            $delMH = MonHoc::find($maMH);
+            if ($delMH->BangDiem()->count() > 0) {
+                return response()->json(['message' => 'Bạn không thể xóa môn học đã ghi nhận bảng điểm'], 422);
+            }
+            if ($delMH->TongKetMon()->count() > 0) {
+                return response()->json(['message' => 'Bạn không thể xóa môn học đã được tổng kết'], 422);
+            }
+            if ($delMH->ChuongTrinhHoc()->count() > 0) {
+                return response()->json(['message' => 'Bạn không thể xóa môn học đã được dùng làm chương trình học'], 422);
+            }
+        }
+        foreach (json_decode($request->maMH, true)  as $maMH)
+        {
+            $delMH = MonHoc::find($maMH);
+            $delMH->delete();
+
+        }
+
+
+        return response()->json(['message' => 'Xóa môn học thành công'], 200);
     }
 }

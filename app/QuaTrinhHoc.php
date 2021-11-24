@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class QuaTrinhHoc extends Model
 {
+    // use SoftDeletes;
     protected $fillable = [ 'maLop', 'maHS', 'maHK', 'diemTB', 'hanhKiem', 'baoHiem', 'hocPhi'];
     protected $primaryKey = 'maQTH';
     public function Lop() {
