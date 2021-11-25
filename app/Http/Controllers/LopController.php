@@ -9,6 +9,7 @@ use App\Lop;
 use App\QuanLyLop;
 use App\QuaTrinhHoc;
 use App\ThamSo;
+use App\TongKetHocKy;
 use Illuminate\Database\Eloquent\Collection;
 
 class LopController extends Controller
@@ -27,6 +28,11 @@ class LopController extends Controller
            else $lop->siSo = $qths->count();
         }
         return $lops;
+    }
+    public function getTopLop($maHK) {
+        $tkhks = TongKetHocKy::where('maHK', $maHK)->orderBy('tiLe', 'desc')->get();
+        $tkhks->map(function ($tkhk){$new = $tkhk; $new->tenLop = $tkhk->Lop->tenLop;});
+        return $tkhks;
     }
     public function getHocSinhCuaLop($maLop, $maHK)
     {

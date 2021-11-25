@@ -127,6 +127,12 @@ Route::get("tong-quan", function () {
     $soMonHoc = MonHoc::all()->count();
     return response()->json(["soLopHoc" => $soLopHoc, "soGV" => $soGV, "soHocSinh" => $soHocSinh, "soMonHoc" => $soMonHoc]);
 });
+// Top học sinh điểm cao trong học kì
+Route::get("top-hs/{maHK}", [HocSinhController::class, 'getTopHocSinh']);
+// Top lớp theo học kì
+Route::get("top-lop/{maHK}", [LopController::class, 'getTopLop']);
+// Số lượng đạt, rớt theo năm
+Route::get("dat-rot", [TongKetHocKyController::class, 'getDatRot']);
 
 });
 

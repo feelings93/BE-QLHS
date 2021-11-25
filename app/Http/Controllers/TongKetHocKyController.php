@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\HocKy;
 use App\Lop;
 use App\QuaTrinhHoc;
 use App\ThamSo;
 use App\TongKetHocKy;
+use App\TongKetMon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class TongKetHocKyController extends Controller
@@ -14,6 +17,36 @@ class TongKetHocKyController extends Controller
     {
         $tkhks = TongKetHocKy::where('maHK', $maHK)->get();
         return $tkhks;
+    }
+    public function getDatRot() {
+        $hks = HocKy::all();
+        // return TongKetHocKy::where('maHK', 1)->sum('soLuongDat');
+        $namHocs = [];
+        foreach($hks as $hk) {
+
+            if (!in_array($hk->namHoc,$namHocs)) {
+                array_push($namHocs, $hk->namHoc);
+
+            }
+        }
+        $res = new Collection();
+        foreach ($namHocs as $namHoc) {
+            $hks = HocKy::where('namHoc', $namHoc)->get();
+            $soLuongDat = 0;
+            $siSo = 0;
+            foreach ($hks as $hk) {
+                $soLuongDat += TongKetHocKy::where('maHK', $hk->maHK)->sum('soLuongDat');
+
+                $siSo += TongKetHocKy::where('maHK', $hk->maHK)->sum('siSo');
+
+            }
+            $eii = new TongKetMon();
+            $eii->namHoc = $namHoc;
+            $eii->soLuongDat = $soLuongDat;
+            $eii->soLuongRot = $siSo - $soLuongDat;
+            $res->push($eii);
+        }
+        return $res;
     }
     public function updateByForeign($maHK)
     {
@@ -39,7 +72,7 @@ class TongKetHocKyController extends Controller
             $tkhk->siSo = $qths->count();
 
             if ($qths->count() === 0) {
-                $tkhk->tiLe = 100;
+                $tkhk->tiLe = 0;
             }
             else $tkhk->tiLe = $sld / $qths->count() * 100;
              $tkhk->save();

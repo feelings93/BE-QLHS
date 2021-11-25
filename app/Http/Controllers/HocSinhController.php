@@ -7,15 +7,16 @@ use App\HocSinh;
 use App\QuaTrinhHoc;
 use App\ThamSo;
 use DateTime;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class HocSinhController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
 
-    }//
+    // }//
 
     /**
      *
@@ -41,6 +42,19 @@ class HocSinhController extends Controller
 
         }
         return HocSinh::all()->except($maHSDaHoc);
+    }
+    public function getTopHocSinh($maHK)
+    {
+        $qths = QuaTrinhHoc::where('maHK', $maHK)->orderBy('diemTB', 'desc')->get();
+        $res = new Collection();
+        foreach ($qths as $qth) {
+            $hs = $qth->HocSinh;
+            $hs->diemTB = $qth->diemTB;
+            $hs->tenLop = $qth->Lop->tenLop;
+            $res->add($hs);
+        }
+
+        return $res;
     }
     /**
      * Show the form for creating a new resource.

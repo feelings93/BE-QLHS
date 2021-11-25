@@ -45,7 +45,7 @@ class TongKetMonController extends Controller
             $tkm->siSo = $qths->count();
 
             if ($qths->count() === 0) {
-                $tkm->tiLe = 100;
+                $tkm->tiLe = 0;
             }
             else $tkm->tiLe = $sld / $qths->count() * 100;
             $tkm->save();
