@@ -60,6 +60,8 @@ Route::group([
 Route::get('hoc-sinh', [HocSinhController::class, 'index']);
 
 Route::get('/hoc-sinh/{maHS}', [HocSinhController::class, 'show']);
+Route::get('/chi-tiet-hs/{maHS}', [HocSinhController::class, 'getChiTietHocSinh']);
+
 Route::get('/hoc-sinh-trong/{id}', [HocSinhController::class, 'getHocSinhTrong']);
 
 Route::post('/hoc-sinh', [HocSinhController::class, 'store']);

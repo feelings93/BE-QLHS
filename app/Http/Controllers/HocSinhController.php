@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\BangDiem;
 use App\HocKy;
+use App\HocLuc;
 use App\HocSinh;
 use App\QuaTrinhHoc;
 use App\ThamSo;
@@ -55,6 +57,53 @@ class HocSinhController extends Controller
         }
 
         return $res;
+    }
+    public function getChiTietHocSinh($maHS)
+    {
+        $hs = HocSinh::find($maHS);
+        $qths = $hs->QTH()->orderBy('maHK', 'desc')->get();
+        $newQths = new Collection();
+        foreach ($qths as $qth) {
+
+            $newQth = new QuaTrinhHoc();
+            $newQth->tenHK = $qth->HocKy->tenHK;
+            $newQth->diemTB = $qth->diemTB;
+            $newQth->tenLop = $qth->Lop->tenLop;
+            $newQth->hanhKiem = $qth->hanhKiem;
+            $newQth->hocLuc = HocLuc::where('diemCanTren', '>',  $newQth->diemTB)->where('diemCanDuoi', '<',  $newQth->diemTB)->get()[0]->tenHL;
+            $newQth->bangDiem = new Collection();
+            foreach($qth->BangDiem()->get() as $bangDiem) {
+                $newBD = new BangDiem();
+                $newBD->maBD = $bangDiem->maBD;
+                $newBD->tenMH = $bangDiem->MonHoc->tenMH;
+                $newBD->diemTBM = $bangDiem->diemTBM;
+
+                $newBD->diemMieng = $bangDiem->ChiTietBangDiem()->where('maLHKT', 1)->get()->map(
+                        function ($item) {
+                            return $item-> diem;
+                        }
+                );
+                $newBD->diem15P = $bangDiem->ChiTietBangDiem()->where('maLHKT', 2)->get()->map(
+                        function ($item) {
+                            return $item-> diem;
+                        }
+                );
+                $newBD->diem1Tiet = $bangDiem->ChiTietBangDiem()->where('maLHKT', 3)->get()->map(
+                        function ($item) {
+                            return $item-> diem;
+                        }
+                );
+                $newBD->diemHK = $bangDiem->ChiTietBangDiem()->where('maLHKT', 4)->get()->map(
+                        function ($item) {
+                            return $item-> diem;
+                        }
+                );
+                $newQth->bangDiem->add($newBD);
+            }
+            $newQths->add($newQth);
+        }
+        $hs->qth = $newQths;
+        return $hs;
     }
     /**
      * Show the form for creating a new resource.
