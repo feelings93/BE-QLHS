@@ -36,7 +36,7 @@ class BangDiemController extends Controller
                 $newBD->diemHK = [];
             }
             else {
-                $newBD->maBD = $bangDiem->maBD;
+                $newBD  ->maBD = $bangDiem->maBD;
                 $newBD->diemTBM = $bangDiem->diemTBM;
 
                 $newBD->diemMieng = $bangDiem->ChiTietBangDiem()->where('maLHKT', 1)->get()->map(
@@ -139,7 +139,7 @@ class BangDiemController extends Controller
         }
         else  $qth->diemTB = -1;
         $qth->save();
-        return response()->json(['diemTBM'=> $bd->diemTBM, 'maBD' => $bd->maBD], 200);
+        return response()->json(['diemTBM'=> number_format($bd->diemTBM, 2, '.') , 'maBD' => $bd->maBD], 200);
     }
     public function suaBangDiem(Request $request, $id) {
         $bd = BangDiem::find($id);
@@ -212,7 +212,7 @@ class BangDiemController extends Controller
         }
         else  $qth->diemTB = -1;
         $qth->save();
-        return response()->json(['diemTBM'=> $bd->diemTBM], 200);
+        return response()->json(['diemTBM'=> number_format($bd->diemTBM, 2, '.')], 200);
 
     }
     public function getLopHKMH()
