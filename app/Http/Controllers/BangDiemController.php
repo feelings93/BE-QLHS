@@ -212,7 +212,8 @@ class BangDiemController extends Controller
         }
         else  $qth->diemTB = -1;
         $qth->save();
-        return response()->json(['diemTBM'=> number_format($bd->diemTBM, 2, '.')], 200);
+        return response()->json(['diemTBM'=> number_format($bd->diemTBM, 2, '.') , 'maBD' => $bd->maBD], 200);
+
 
     }
     public function getLopHKMH()
