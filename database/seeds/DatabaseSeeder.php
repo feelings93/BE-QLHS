@@ -4,6 +4,7 @@ use App\ChuongTrinhHoc;
 use App\HocKy;
 use App\LoaiHinhKiemTra;
 use App\MonHoc;
+use App\NhomNguoiDung;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -16,30 +17,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // factory(User::class, 10)->create();
+
+        NhomNguoiDung::create(["tenNhom" => "Admin"]);
+        NhomNguoiDung::create(["tenNhom" => "Hiệu trưởng"]);
+        NhomNguoiDung::create(["tenNhom" => "Giáo vụ"]);
+        factory(User::class, 5)->create();
         // $this->call(HocSinhSeeder::class);
-        MonHoc::create(['tenMH' => 'Toán']);
-        MonHoc::create(['tenMH' => 'Ngữ Văn']);
-        MonHoc::create(['tenMH' => 'Sinh Học']);
-        MonHoc::create(['tenMH' => 'Vật Lý']);
-        MonHoc::create(['tenMH' => 'Hóa Học']);
-        MonHoc::create(['tenMH' => 'Lịch Sử']);
-        MonHoc::create(['tenMH' => 'Địa Lý']);
-        MonHoc::create(['tenMH' => 'Tiếng Anh']);
-        MonHoc::create(['tenMH' => 'Giáo Dục Công Dân']);
-        MonHoc::create(['tenMH' => 'Giáo Dục QPAN']);
-        MonHoc::create(['tenMH' => 'Thể Dục']);
-        MonHoc::create(['tenMH' => 'Công Nghệ']);
-        MonHoc::create(['tenMH' => 'Tin học']);
+        // MonHoc::create(['tenMH' => 'Toán']);
+        // MonHoc::create(['tenMH' => 'Ngữ Văn']);
+        // MonHoc::create(['tenMH' => 'Sinh Học']);
+        // MonHoc::create(['tenMH' => 'Vật Lý']);
+        // MonHoc::create(['tenMH' => 'Hóa Học']);
+        // MonHoc::create(['tenMH' => 'Lịch Sử']);
+        // MonHoc::create(['tenMH' => 'Địa Lý']);
+        // MonHoc::create(['tenMH' => 'Tiếng Anh']);
+        // MonHoc::create(['tenMH' => 'Giáo Dục Công Dân']);
+        // MonHoc::create(['tenMH' => 'Giáo Dục QPAN']);
+        // MonHoc::create(['tenMH' => 'Thể Dục']);
+        // MonHoc::create(['tenMH' => 'Công Nghệ']);
+        // MonHoc::create(['tenMH' => 'Tin học']);
 
-        HocKy::create(['tenHK' => 'Học Kỳ 1', 'namHoc' => 2020]);
-        HocKy::create(['tenHK' => 'Học Kỳ 2', 'namHoc' => 2020]);
-        HocKy::create(['tenHK' => 'Học Kỳ 1', 'namHoc' => 2021]);
-        HocKy::create(['tenHK' => 'Học Kỳ 2', 'namHoc' => 2021]);
+        // HocKy::create(['tenHK' => 'Học Kỳ 1', 'namHoc' => 2020]);
+        // HocKy::create(['tenHK' => 'Học Kỳ 2', 'namHoc' => 2020]);
+        // HocKy::create(['tenHK' => 'Học Kỳ 1', 'namHoc' => 2021]);
+        // HocKy::create(['tenHK' => 'Học Kỳ 2', 'namHoc' => 2021]);
 
-        LoaiHinhKiemTra::create(['tenLHKT' => '15 phút', 'heSoDiem' => 1, 'thoiGianKiemTra' => 15]);
-        LoaiHinhKiemTra::create(['tenLHKT' => '1 tiết', 'heSoDiem' => 2, 'thoiGianKiemTra' => 45]);
-        LoaiHinhKiemTra::create(['tenLHKT' => 'Học kỳ', 'heSoDiem' => 3, 'thoiGianKiemTra' => 90]);
+        // LoaiHinhKiemTra::create(['tenLHKT' => '15 phút', 'heSoDiem' => 1, 'thoiGianKiemTra' => 15]);
+        // LoaiHinhKiemTra::create(['tenLHKT' => '1 tiết', 'heSoDiem' => 2, 'thoiGianKiemTra' => 45]);
+        // LoaiHinhKiemTra::create(['tenLHKT' => 'Học kỳ', 'heSoDiem' => 3, 'thoiGianKiemTra' => 90]);
 
         ChuongTrinhHoc::create(['maKhoi' => 1, 'maMH' => 1, 'heSo' => 1]);
         ChuongTrinhHoc::create(['maKhoi' => 1, 'maMH' => 2, 'heSo' => 1]);
